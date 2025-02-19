@@ -1,39 +1,85 @@
-# Capstone Project
-Data Science Bootcamp 826 Final Project 
+# **Capstone Project: Sentiment Analysis of ChatGPT iOS Store Reviews**
 
-**Problem Statement:** To enhance the customer experience for (online) products, this project will analyze user reviews on ChatGPT from the iOS store. By leveraging NLP techniques, I aim to classify overall sentiment, extract product-related feedback and identify trends in user satisfaction. Insights from this analysis will inform actionable recommendations to improve a product’s usability, functionality and overall satisfaction.
+## **Overview**
 
-### Intro: 
+This project analyzes user reviews of **ChatGPT** on the **iOS App Store** to classify sentiment, extract key product feedback, and identify trends in user satisfaction. Using **Natural Language Processing (NLP)** techniques, the goal is to uncover actionable insights that can inform improvements in **product usability**, **functionality**, and **overall satisfaction**.
 
-So why is looking at user feedback and keeping user-centric thinking important? Sentiment analysis helps companies identify the tone and emotion behind reviews. This can ultimately help provide insights into customer satisfaction and dissatisfaction. This understanding can be invaluable for companies, especially early stage companies because it highlights areas that need improvement. By analyzing feedback, companies are able to pinpoint product features that are performing well or poorly and allocate tasks accordingly. For startups especially, resources are spread out extremely thin, so it is important that a company is able to move efficiently and prioritize improvements or innovations based on user needs. It is also incredibly important for a company to establish its brand as being user-centric and foster customer loyalty. By heeding to customer complaints, a company can show that they care about their user and want to implement solutions that improve the user experience. Manually analyzing thousands of reviews is impractical and inefficient. Sentiment analysis automates the process and allows a company to extract actionable insights from a large dataset.
+## **Problem Statement**
 
-### EDA
+Understanding customer sentiment is crucial for enhancing the user experience of products. This project leverages **sentiment analysis** to automate the extraction of insights from large sets of reviews. The findings can help:
 
-In this section, I had hoped to use EDA to be able to better understand the distribution of the data. Some questions I would like to be able to answer are what are the most popular features? Is the app being rated positively or negatively overall? Do users' like certain features or do they dislike certain features? By visualizing the data, I hope to better understand the reviews and how they are being distributed. I am hoping that these insights will help businesses to see where users have the most positive feedback and where they feel the product is lacking the most.
+- **Pinpoint areas** for product improvements or innovations
+- Identify features with **positive feedback** and those requiring **enhancement**
+- **Optimize product features** based on user feedback, particularly for startups with limited resources
 
-I started off with TextBlob to determine sentiment polarity. I was able to create an arbitrary distribution showing the number of positive, neutral and negative scores among the given dataset. In order to further explore sentiment distribution, I looked into VADER. VADER or Valance Aware Dictionary and Sentiment Reasoner is a rule-based sentiment analysis tool specifically tuned for social media and customer reviews (for example, emojis, punctuation, etc). This outputs a compund score that ranges from -1 (negative sentiment) to 1 (positive sentiment). Below, I used polarity_score(x) to return a dictionary of sentiment scores. This applies a sentiment score to each review allowing us to see a clear distribution of negative, neutral and positive reviews. I opted for the pretrained model VADER because it results in quick, interpretable results without me having to manually train the model. 
+### **Objective**:
+By automating sentiment analysis, I aim to allow companies to move quickly, prioritize user-driven changes, and increase **customer satisfaction**.
 
-I had some trouble pulling features and their corresponding sentiments using NLP models. Instead, I went ahead to create our own arbitrary features and try to group them by sentiment. Even though ideally we would have a model sort through features and their respective sentiments, we are going to create our own list of features and plot out their sentiments for the sake of this project. By using spaCY, I was able to check the top 20 features among the user reviews. This graph provided much insight on what users were interested in and what features they were keen on talking about. 
+## **Approach**
 
-### Modeling
+### **Dataset & Preprocessing**
 
-Clustering allows the ability to group similar data points, in this case, product reviews. I want to use K-Means because it can help us understand patterns or themes within the customer reviews. I am hoping that these clusters will represent distinct customer sentiments or opinions on the various feature of the product. I went ahead and fit a K-means model and checked both the elbow curve and silhoutte scores to evaluate the model. The silhoutte score closer to +1 indicates well-formed clusters. On the positive side (pun intended), our silhoutte score is not negative. This measures how similar a point is to its own cluster compared to neighboring clusters. We can see fr om both the elbow curve and silhoutte scores the most optimal K-value is 4. This means that 4 clusters results in the most accurate and efficient number of clusters. 
+- **Data Source**: iOS App Store reviews for **ChatGPT**
+- **Preprocessing**: Tokenization, stopword removal, lemmatization using **spaCy** to standardize the text data and improve model accuracy.
+- **Data Cleaning**: Removing duplicate reviews, handling missing values, and dealing with inconsistencies such as varying date formats.
 
-### Conclusion 
+### **Feature Engineering**:
+- **TextBlob** for initial sentiment analysis: Used to calculate sentiment polarity and identify if reviews lean positive, neutral, or negative.
+- **VADER** for refined sentiment analysis: A tool specifically tuned for social media and customer reviews that takes into account the usage of emojis, punctuation, and common slang.
 
-Using a K-Means model made sense to me for the goal of my project because clustering allows us to group similar data points and uncover patterns or themes within customer reviews. I had hoped to see that the clusters would represent distinct customer sentiments or opinions, especially regarding unique features on the product.
+### **Exploratory Data Analysis (EDA)**:
+- **Sentiment Distribution**: Visualized the overall sentiment of the dataset using **TextBlob** and **VADER**. This provided an understanding of the overall customer satisfaction with the app.
+- **Feature Analysis**: Identified the most frequently discussed product features by parsing the reviews using **spaCy**. This allowed me to focus on key areas for product improvement.
 
-It is obvious that the silhoutte scores are not performing as well as I had hoped they would. From here, I would like to pivot to using SVM instead. Here's why this could be more successful:
+### **Key Questions Explored in EDA**:
+- What is the overall sentiment towards the product?
+- Which features of the product are most frequently mentioned in user reviews?
+- Are users generally satisfied or dissatisfied with ChatGPT’s performance on iOS?
 
-A supervised learning algorithm like SVM is able to find an optimal way to classify labeled data. It is extremely effective when there is labeled data and the goal is classification. This leads me to believe that this problem may benefit from a supervised model rather than an unsupervised model. K-means is an unsupervised algorithm that assigns data into clusters based purely on distance metrics. Because it does not use labels, this can lead to inaccurate groupings as we can see above.
+## **Modeling**
 
-Here, it is important to note that the SVM model would highly benefit from dimensionality reduction with PCA. PCA reduces the high-dimensional embeddings to a smaller number of features which is able to capture variance most relevant for classification.
+### **Clustering with K-Means**:
+- **Objective**: Group similar reviews to identify distinct customer sentiments regarding the product features.
+- **Model Selection**: K-Means was selected due to its ability to uncover patterns and themes within a large dataset of unstructured text.
+- **Evaluation Metrics**: 
+  - **Elbow Method**: Used to determine the optimal number of clusters by examining the total within-cluster sum of squares.
+  - **Silhouette Score**: Used to assess the quality of the clusters formed by K-Means. A silhouette score closer to +1 indicates well-formed clusters.
 
-While evaluating the SVM model, I would look at metrics like accuracy, precision, recall and F1 score. This would give a better understanding of whether classification goals were met.
+### **Key Insights from Clustering**:
+- **Silhouette Score**: An optimal K-value of 4 was identified based on the silhouette score and elbow curve analysis, suggesting that 4 clusters provide the most accurate groupings.
+- **Cluster Composition**: The clusters revealed distinct patterns in sentiment, with some clusters showcasing positive sentiment around certain features, while others identified dissatisfaction with specific aspects of the app.
 
-All of this being said, I do not want to completely abandon the idea of fine-tuning and working on the unsupervised clustering model. I still believe that this model can lead to meaningful insights. First, obviously, I believe that collecting more data will improve the model's ability to cluster similar features more effectively. The project can also be taken to the next level where with ample data, clustering can reveal segments of users with similar preferences which can be incredibly useful for personalized marketing or product reccomendations. For example, we may have a cluster that reveals users who prioritize design while others prefer budget. This can be incredibly valuable information for a company who wants to further market their product. Analyzing clusters can also inform product roadmap decisions. K-Means also allows for great interpretability as each cluster has a centroid which represents the average review in each specific cluster. This could help us understand what the "typical" review in each cluster looks like.
+### **Transition to Supervised Learning (SVM)**:
+- **Limitations of K-Means**: While K-Means provided useful clustering, the model’s performance could be improved with a **supervised learning approach**.
+- **Support Vector Machines (SVM)**: Transitioning to **SVM** for classification is a natural next step since it is well-suited for labeled data and can provide more accurate results for predicting user sentiment.
+- **Dimensionality Reduction**: **Principal Component Analysis (PCA)** will be applied to reduce the feature space and capture the most relevant variance for classification tasks.
+  
+### **Model Evaluation**:
+- **Performance Metrics**: The SVM model will be evaluated using **accuracy**, **precision**, **recall**, and **F1 score**. These metrics will help assess how well the model performs in classifying user reviews into sentiment categories.
+  
+### **Key Benefits of Using SVM**:
+- **Class Imbalance Handling**: SVM is particularly effective at handling class imbalances, which is common in sentiment analysis, where negative reviews may vastly outnumber positive ones.
+- **High-dimensional Data**: SVM is ideal for high-dimensional data, especially when dealing with large-scale text data that has been vectorized.
 
-### Next Steps
+## **Challenges & Insights**
 
-With more time, I would like to implement more features into this project to make it more interactive and help make it more digestable for stakeholders. If they want to see specific feature attributes, I want to make it easier for them them visualize what users are saying about their product. I also want to create a Tableau dashboard to display this data. Having a clean way to visualize this data provides interactive visualizations that make sentiment trends, cluster patterns, and feature-opinion relationships easier to understand for stakeholders. Finally, more data will be very useful in  enhancing model accuracy, enabling finer sentiment granularity, uncovering diverse feature-opinion pairs, and increasing the robustness of clustering. I look forward to collecting new data, with even different products to understand how I can better improve this project and make it more accesible. 
+- **Data Quality**: While K-Means produced useful clustering, the lack of labeled data led to less accurate groupings. Transitioning to a supervised model like SVM will provide clearer classifications.
+- **Clustering vs. Classification**: K-Means clustering is useful for exploratory analysis, but a supervised approach using **SVM** will provide higher accuracy for sentiment classification.
 
+## **Business Impact**
+
+- **Customer-Centric Insights**: The project allows businesses to quickly analyze large volumes of user feedback and gain insights into areas that need improvement or innovation.
+- **Product Roadmap**: By identifying the most discussed features, the model can help inform future product roadmaps and prioritize features based on user feedback.
+- **Personalized Marketing**: Understanding specific customer sentiments and preferences can lead to personalized marketing campaigns, improving user retention and engagement.
+
+## **Future Work & Improvements**
+
+- **Feature Expansion**: Incorporate additional features such as **review length**, **emojis**, or **text sentiment intensity** to improve model accuracy.
+- **Interactive Dashboard**: Build a **Tableau dashboard** to allow stakeholders to visualize sentiment trends, clusters, and feature relationships dynamically.
+- **Data Augmentation**: Gather more reviews from **different platforms** and **product versions** to further refine the model and gain deeper insights into user satisfaction across different user demographics.
+
+## **Conclusion**
+
+This project showcases the potential of **sentiment analysis** and **NLP techniques** in understanding customer feedback at scale. By automating the process of sentiment extraction from reviews, businesses can unlock valuable insights into user satisfaction and product performance. Transitioning from clustering to a supervised classification model using **SVM** will provide a more robust solution to accurately identify sentiment in user reviews, ultimately helping product teams make data-driven decisions that enhance customer experience and satisfaction.
+
+---
